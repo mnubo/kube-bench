@@ -86,7 +86,7 @@ node:
   proxy:
     bins:
       - "kube-proxy"
-      - "hyperkube proxy"
+      - "hyperkube kube-proxy"
       - "proxy"
     confs:
       - /etc/kubernetes/proxy.conf
