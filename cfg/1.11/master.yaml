@@ -1209,7 +1209,7 @@ groups:
 
   - id: 1.5.3
     text: "Ensure that the --auto-tls argument is not set to true (Scored)"
-    audit: "ps -ef | grep $etcdbin | grep -v grep"
+    audit: "ps -ef | grep $etcdbin | grep -v grep | grep -v apiserver"
     tests:
       bin_op: or
       test_items:
@@ -1219,6 +1219,7 @@ groups:
         compare:
           op: eq
           value: false
+        set: true
     remediation: |
       Edit the etcd pod specification file $etcdconf on the master
       node and either remove the --auto-tls parameter or set it to false.
@@ -1228,8 +1229,7 @@ groups:
   - id: 1.5.4
     text: "Ensure that the --peer-cert-file and --peer-key-file arguments are
     set as appropriate (Scored)"
-    audit: "ps -ef | grep $etcdbin | grep -v grep"
-    type: "manual"
+    audit: "ps -ef | grep $etcdbin | grep -v grep | grep -v apiserver | tee /tmp/seb.txt"
     tests:
       bin_op: and
       test_items:
@@ -1241,14 +1241,13 @@ groups:
       Follow the etcd service documentation and configure peer TLS encryption as appropriate
       for your etcd cluster. Then, edit the etcd pod specification file $etcdconf on the
       master node and set the below parameters.
-      --peer-client-file=</path/to/peer-cert-file>
+      --peer-cert-file=</path/to/peer-cert-file>
       --peer-key-file=</path/to/peer-key-file>
     scored: true
 
   - id: 1.5.5
     text: "Ensure that the --peer-client-cert-auth argument is set to true (Scored)"
-    audit: "ps -ef | grep $etcdbin | grep -v grep"
-    type: "manual"
+    audit: "ps -ef | grep $etcdbin | grep -v grep | grep -v apiserver"
     tests:
       test_items:
       - flag: "--peer-client-cert-auth"
@@ -1264,8 +1263,7 @@ groups:
 
   - id: 1.5.6
     text: "Ensure that the --peer-auto-tls argument is not set to true (Scored)"
-    audit: "ps -ef | grep $etcdbin | grep -v grep"
-    type: "manual"
+    audit: "ps -ef | grep $etcdbin | grep -v grep | grep -v apiserver"
     tests:
       bin_op: or
       test_items:
@@ -1284,7 +1282,7 @@ groups:
 
   - id: 1.5.7
     text: "Ensure that a unique Certificate Authority is used for etcd (Not Scored)"
-    audit: "ps -ef | grep $etcdbin | grep -v grep"
+    audit: "ps -ef | grep $etcdbin | grep -v grep | grep -v apiserver"
     type: "manual"
     tests:
       test_items:
